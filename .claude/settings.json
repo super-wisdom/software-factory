@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make test)",
+      "Bash(make lint)",
+      "Bash(make build)",
+      "Bash(make check)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/secrets/**)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "ruff format . >/dev/null 2>&1 || true; ruff check --fix . >/dev/null 2>&1 || true" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "INPUT=$(cat); echo \"$INPUT\" | jq -r '.tool_input.command // \"\"' | grep -qE 'rm -rf|git push.*--force|--hard' && { echo 'factory guard: destructive command blocked' >&2; exit 2; } || exit 0" }
+        ]
+      }
+    ]
+  }
+}

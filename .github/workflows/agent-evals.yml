@@ -1,0 +1,22 @@
+name: agent-evals
+on:
+  push:
+    paths:
+      - "CLAUDE.md"
+      - ".claude/**"
+      - "evals/**"
+  schedule:
+    - cron: "0 6 * * *"   # 06:00 UTC nightly
+  workflow_dispatch:
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run eval suite
+        run: |
+          echo "TODO: invoke your eval harness here (see evals/README.md)."
+          echo "Gate config changes on the pass rate once the harness is wired."
