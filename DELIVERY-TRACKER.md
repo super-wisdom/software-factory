@@ -25,9 +25,7 @@ not the model's speed.
 
 | ID | Feature / fix | Worktree / stream | Intent | Spec | Plan | Build | Test | Review | Deploy | Owner | Notes / blockers |
 |----|---------------|-------------------|:------:|:----:|:----:|:-----:|:----:|:------:|:------:|:-----:|------------------|
-| F-001 | _example: claims status self-service_ | feat-claims-status | ✅ | ✅ | ✅ | 🟡 | ⬜ | ⬜ | ⬜ | ENG | caching for 50rps limit |
-| F-002 | | | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | | |
-| F-003 | | | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | | |
+| F-002 | Eval runner | feat/F-002-eval-runner | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ⬜ | you | PR #2 open; CI + agent-evals running |
 
 ## Backlog (accepted intents not yet started)
 
@@ -39,7 +37,7 @@ not the model's speed.
 
 | ID | Feature / fix | Shipped date | PR | Eval added? | Notes |
 |----|---------------|:------------:|----|:-----------:|-------|
-| | | | | | |
+| F-001 | factory new | 2026-08-31 | #1 | no | first real unit; +portable Makefile |
 
 ---
 

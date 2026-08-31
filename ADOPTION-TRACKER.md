@@ -14,19 +14,19 @@ so the git history records when each capability came online. Pair with `ADOPTION
 
 | Phase | Capability | Status | Owner | Started | Done | Success metric | Notes |
 |------:|------------|:------:|:-----:|---------|------|----------------|-------|
-| 0 | Repo layout + folders | ⬜ | ENG | | | Layout matches design | |
-| 0 | `CLAUDE.md` (one page) | ⬜ | ENG | | | Fresh session runs checks unassisted | |
-| 0 | One-command test/build/lint | ⬜ | ENG | | | `make test/build/lint` exit non-zero on fail | |
-| 1 | Artifact templates in use | ⬜ | — | | | intent/spec/plan committed for a real feature | |
-| 1 | First feature through full chain | ⬜ | — | | | 1 unit reached PR with all 3 artifacts | |
-| 1 | Plan mode = default | ⬜ | ENG | | | Non-trivial work starts in plan mode | |
-| 2 | First skill (encoded standard) | ⬜ | ENG | | | Skill triggers on 3/3 phrasings | |
-| 2 | Build-time hooks | ⬜ | ENG | | | Protected-path edit is blocked | |
-| 2 | `verifier` subagent | ⬜ | ENG | | | Runs app + reports before "done" | |
+| 0 | Repo layout + folders | ✅ | ENG | 2026-08-31 | 2026-08-31 | Layout matches design | flattened to root |
+| 0 | `CLAUDE.md` (one page) | ✅ | ENG | 2026-08-31 | 2026-08-31 | Fresh session runs checks unassisted | |
+| 0 | One-command test/build/lint | ✅ | ENG | 2026-08-31 | 2026-08-31 | `make test/build/lint` exit non-zero on fail | portable Makefile |
+| 1 | Artifact templates in use | ✅ | — | 2026-08-31 | 2026-08-31 | intent/spec/plan committed for a real feature | F-001, F-002 |
+| 1 | First feature through full chain | ✅ | — | 2026-08-31 | 2026-08-31 | 1 unit reached PR with all 3 artifacts | F-001 merged (#1) |
+| 1 | Plan mode = default | 🟡 | ENG | 2026-08-31 | | Non-trivial work starts in plan mode | adopt as habit |
+| 2 | First skill (encoded standard) | ✅ | ENG | 2026-08-31 | 2026-08-31 | Skill triggers on 3/3 phrasings | artifact-chain |
+| 2 | Build-time hooks | 🟡 | ENG | 2026-08-31 | | Protected-path edit is blocked | shipped; not yet battle-tested |
+| 2 | `verifier` subagent | 🟡 | ENG | 2026-08-31 | | Runs app + reports before "done" | present; not yet used |
 | 3 | AI PR review on | ⬜ | ENG | | | Every PR gets an auto review | |
 | 3 | `REVIEW.md` policy | ⬜ | PO | | | Important vs nit defined; nits capped | |
 | 3 | Branch protection | ⬜ | ENG | | | Human approval required to merge | |
-| 3 | Eval suite + CI | ⬜ | ENG | | | Evals run on config change + nightly | |
+| 3 | Eval suite + CI | ✅ | ENG | 2026-08-31 | 2026-08-31 | Evals run on config change + nightly | CI live; F-002 eval suite |
 | 4 | Deterministic detection script | ⏸ | ENG | | | Band breach detected reliably | Defer until live traffic |
 | 4 | `bands.yaml` tiers | ⏸ | ENG | | | 1σ/2σ/3σ tiers wired | Defer |
 | 4 | Rehearsed rollback | ⏸ | ENG | | | Rollback proven in staging | Defer |
