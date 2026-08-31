@@ -5,6 +5,7 @@ on:
       - "CLAUDE.md"
       - ".claude/**"
       - "evals/**"
+      - "templates/**"
   schedule:
     - cron: "0 6 * * *"   # 06:00 UTC nightly
   workflow_dispatch:
@@ -16,7 +17,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run eval suite
-        run: |
-          echo "TODO: invoke your eval harness here (see evals/README.md)."
-          echo "Gate config changes on the pass rate once the harness is wired."
+      - run: python -m pip install -U pip && pip install -e ".[dev]"
+      - name: Run agent-config eval suite
+        run: python -m software_factory.cli eval

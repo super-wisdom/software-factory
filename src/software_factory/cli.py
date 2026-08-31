@@ -8,6 +8,8 @@ import re
 import sys
 from pathlib import Path
 
+from .evals import run_all
+
 REPO_ROOT_MARKERS = ("templates", "intent", "specs", "plans")
 ARTIFACTS = ("intent", "specs", "plans")
 TEMPLATE_FILES = {"intent": "intent.md", "specs": "spec.md", "plans": "plan.md"}
@@ -57,7 +59,6 @@ def cmd_new(args: argparse.Namespace) -> int:
     fid = fid.upper()
     date = _dt.datetime.now().astimezone().date().isoformat()
 
-    # Resolve + pre-check every target before writing anything (no partial writes).
     planned: dict[Path, str] = {}
     for sub in ARTIFACTS:
         tpl = root / "templates" / TEMPLATE_FILES[sub]
@@ -84,13 +85,38 @@ def cmd_new(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval(args: argparse.Namespace) -> int:
+    root = find_repo_root(Path.cwd())
+    results, rate = run_all(root)
+    if not results:
+        print("no eval tasks found in evals/tasks/ (nothing to check).")
+        return 0
+    for r in results:
+        mark = "PASS" if r.passed else "FAIL"
+        print(f"[{mark}] {r.task.id} -- {r.detail}")
+    passed = sum(r.passed for r in results)
+    print(f"\n{passed}/{len(results)} passed ({rate:.0%})")
+    return 0 if rate >= args.min_pass_rate else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="factory", description="Run the software factory line.")
     sub = p.add_subparsers(dest="command", required=True)
+
     new = sub.add_parser("new", help="scaffold a new work unit (intent/spec/plan).")
     new.add_argument("title", help='short human title, e.g. "Export to CSV".')
     new.add_argument("--id", help="override the auto-incremented id (e.g. F-042).")
     new.set_defaults(func=cmd_new)
+
+    ev = sub.add_parser("eval", help="run the agent-config eval suite.")
+    ev.add_argument(
+        "--min-pass-rate",
+        type=float,
+        default=1.0,
+        help="minimum pass rate to exit 0 (default 1.0 = all must pass).",
+    )
+    ev.set_defaults(func=cmd_eval)
+
     return p
 
 

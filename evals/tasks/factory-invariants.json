@@ -1,0 +1,17 @@
+[
+  {"id": "claude-md-commands",
+   "description": "CLAUDE.md documents the check commands agents must use",
+   "cmd": "grep -q '## Commands' CLAUDE.md"},
+  {"id": "settings-valid-json",
+   "description": ".claude/settings.json is parseable JSON",
+   "cmd": "python -m json.tool .claude/settings.json"},
+  {"id": "settings-denies-env",
+   "description": "secrets (.env) are denied to the agent",
+   "cmd": "grep -q '.env' .claude/settings.json"},
+  {"id": "template-placeholder",
+   "description": "intent template keeps the F-XXX placeholder factory-new depends on",
+   "cmd": "grep -q 'F-XXX' templates/intent.md"},
+  {"id": "skill-frontmatter",
+   "description": "artifact-chain skill declares a name in its frontmatter",
+   "cmd": "grep -q '^name:' .claude/skills/artifact-chain/SKILL.md"}
+]
