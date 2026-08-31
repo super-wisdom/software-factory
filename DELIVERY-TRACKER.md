@@ -26,7 +26,7 @@ not the model's speed.
 | ID | Feature / fix | Worktree / stream | Intent | Spec | Plan | Build | Test | Review | Deploy | Owner | Notes / blockers |
 |----|---------------|-------------------|:------:|:----:|:----:|:-----:|:----:|:------:|:------:|:-----:|------------------|
 
-_Nothing in flight — pull the next unit from the backlog._
+| F-003 | Tracker auto-update | feat/F-003-tracker-auto-update | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ⬜ | you | first PR the AI reviewer sees |
 
 ## Backlog (accepted intents not yet started)
 
