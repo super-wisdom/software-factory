@@ -27,6 +27,7 @@ not the model's speed.
 |----|---------------|-------------------|:------:|:----:|:----:|:-----:|:----:|:------:|:------:|:-----:|------------------|
 
 | F-004 | Project init command | feat/F-004-project-init | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ⬜ | you | scaffolds new projects |
+_Nothing in flight — pull the next unit from the backlog._
 
 ## Backlog (accepted intents not yet started)
 
