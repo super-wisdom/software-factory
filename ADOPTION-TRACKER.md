@@ -23,9 +23,9 @@ so the git history records when each capability came online. Pair with `ADOPTION
 | 2 | First skill (encoded standard) | ✅ | ENG | 2026-08-31 | 2026-08-31 | Skill triggers on 3/3 phrasings | artifact-chain |
 | 2 | Build-time hooks | 🟡 | ENG | 2026-08-31 | | Protected-path edit is blocked | shipped; not yet battle-tested |
 | 2 | `verifier` subagent | 🟡 | ENG | 2026-08-31 | | Runs app + reports before "done" | present; not yet used |
-| 3 | AI PR review on | ⬜ | ENG | | | Every PR gets an auto review | |
+| 3 | AI PR review on | ✅ | ENG | 2026-08-31 | 2026-08-31 | Every PR gets an auto review | claude-code-review; ran clean on #5 |
 | 3 | `REVIEW.md` policy | ⬜ | PO | | | Important vs nit defined; nits capped | |
-| 3 | Branch protection | ⬜ | ENG | | | Human approval required to merge | |
+| 3 | Branch protection | ✅ | ENG | 2026-08-31 | 2026-08-31 | PR required; CI gates merge | main-protection ruleset (4 rules) |
 | 3 | Eval suite + CI | ✅ | ENG | 2026-08-31 | 2026-08-31 | Evals run on config change + nightly | CI live; F-002 eval suite |
 | 4 | Deterministic detection script | ⏸ | ENG | | | Band breach detected reliably | Defer until live traffic |
 | 4 | `bands.yaml` tiers | ⏸ | ENG | | | 1σ/2σ/3σ tiers wired | Defer |
