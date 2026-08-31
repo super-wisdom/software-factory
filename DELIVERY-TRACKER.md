@@ -26,7 +26,7 @@ not the model's speed.
 | ID | Feature / fix | Worktree / stream | Intent | Spec | Plan | Build | Test | Review | Deploy | Owner | Notes / blockers |
 |----|---------------|-------------------|:------:|:----:|:----:|:-----:|:----:|:------:|:------:|:-----:|------------------|
 
-| F-003 | Tracker auto-update | feat/F-003-tracker-auto-update | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ⬜ | you | first PR the AI reviewer sees |
+_Nothing in flight — pull the next unit from the backlog._
 
 ## Backlog (accepted intents not yet started)
 
@@ -40,6 +40,7 @@ not the model's speed.
 |----|---------------|:------------:|----|:-----------:|-------|
 | F-001 | factory new | 2026-08-31 | #1 | no | first real unit; +portable Makefile |
 | F-002 | Eval runner | 2026-08-31 | #2 | n/a (is the eval suite) | config regression net live; agent-evals wired |
+| F-003 | Tracker auto-update | 2026-08-31 | #5 | no | factory new auto-updates the tracker; reviewed clean by AI |
 
 ---
 
