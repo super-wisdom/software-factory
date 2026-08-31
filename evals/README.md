@@ -1,12 +1,23 @@
-# Evals — agent-config regression suite
+# Evals -- agent-config regression suite
 
-Purpose: treat `CLAUDE.md`, skills, and hooks like code. When you change them, prove you
-didn't regress the agent's behaviour.
+Treat CLAUDE.md, skills, hooks, and templates like code: when you change them, prove you
+did not break an invariant the agent (or the `factory` tool) relies on.
 
-## Shape
-- Put 20–50 real, recent tasks in `evals/tasks/` — each with a clear pass/fail check
-  (an expected file change, a command that must exit 0, a string that must appear).
-- Wire a runner in `.github/workflows/agent-evals.yml` to execute them and report a pass rate.
-- A config change that drops the pass rate gets reviewed before it merges.
+## Run
+```bash
+factory eval                      # all tasks must pass
+factory eval --min-pass-rate 0.8  # allow a threshold
+```
+Or in CI: `python -m software_factory.cli eval` (see .github/workflows/agent-evals.yml).
 
-Start small: 5 tasks that cover your riskiest workflows beats 50 that cover nothing.
+## Add a task
+Drop a JSON object (or a list of them) into `evals/tasks/*.json`:
+```json
+{ "id": "unique-id",
+  "description": "what invariant this protects",
+  "cmd": "grep -q 'something' SOME_FILE",
+  "expect_exit": 0,
+  "expect_contains": "optional stdout/stderr substring" }
+```
+Each `cmd` runs from the repo root. Keep tasks deterministic and dependency-free.
+Start small: a handful that guard your riskiest config beats fifty that guard nothing.
