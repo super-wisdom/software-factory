@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from .evals import run_all
+from .scaffold import FILES as SCAFFOLD_FILES
 
 REPO_ROOT_MARKERS = ("templates", "intent", "specs", "plans")
 ARTIFACTS = ("intent", "specs", "plans")
@@ -158,6 +159,46 @@ def cmd_eval(args: argparse.Namespace) -> int:
     return 0 if rate >= args.min_pass_rate else 1
 
 
+def package_name(project: str) -> str:
+    """Turn a project name into a valid, importable Python package name."""
+    pkg = re.sub(r"[^0-9a-z]+", "_", project.lower()).strip("_")
+    if not pkg or not (pkg[0].isalpha() or pkg[0] == "_"):
+        pkg = f"pkg_{pkg}" if pkg else "app"
+    return pkg
+
+
+def cmd_init(args: argparse.Namespace) -> int:
+    name = args.name
+    if name == ".":
+        target = Path.cwd()
+        project = target.name
+    else:
+        target = Path.cwd() / name
+        project = name
+    pkg = package_name(project)
+
+    if target.exists() and any(target.iterdir()):
+        raise SystemExit(f"error: {target} exists and is not empty; aborting.")
+
+    written = 0
+    for rel, content in sorted(SCAFFOLD_FILES.items()):
+        dest_rel = rel.replace("__pkg__", pkg)
+        body = content.replace("{{PROJECT_NAME}}", project).replace("{{PACKAGE_NAME}}", pkg)
+        dest = target / dest_rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(body)
+        written += 1
+
+    print(f"scaffolded {project} ({written} files) into {target}")
+    print()
+    print("next:")
+    print(f"  cd {name}" if name != "." else "  # already here")
+    print("  python -m venv .venv && source .venv/bin/activate && make install")
+    print("  make check")
+    print("  git init && git add -A && git commit -m 'chore: initial factory scaffold'")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="factory", description="Run the software factory line.")
     sub = p.add_subparsers(dest="command", required=True)
@@ -180,6 +221,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="minimum pass rate to exit 0 (default 1.0 = all must pass).",
     )
     ev.set_defaults(func=cmd_eval)
+
+    ini = sub.add_parser("init", help="scaffold a new project with the factory line.")
+    ini.add_argument("name", help='project name, or "." for the current directory.')
+    ini.set_defaults(func=cmd_init)
 
     return p
 
