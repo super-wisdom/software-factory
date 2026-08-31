@@ -15,6 +15,9 @@ ARTIFACTS = ("intent", "specs", "plans")
 TEMPLATE_FILES = {"intent": "intent.md", "specs": "spec.md", "plans": "plan.md"}
 ID_RE = re.compile(r"^F-(\d+)$", re.IGNORECASE)
 ID_PREFIX_RE = re.compile(r"^F-(\d+)", re.IGNORECASE)
+TRACKER = "DELIVERY-TRACKER.md"
+IN_PROGRESS = "\U0001f7e1"  # yellow circle
+NOT_YET = "\u2b1c"  # white square
 
 
 def find_repo_root(start: Path) -> Path:
@@ -51,6 +54,62 @@ def fill(template: str, fid: str, title: str, date: str) -> str:
     return out
 
 
+def inflight_row(fid: str, title: str, branch: str) -> str:
+    """Build the DELIVERY-TRACKER 'In flight' row for a freshly-scaffolded unit."""
+    cells = [fid, title, branch, IN_PROGRESS] + [NOT_YET] * 6 + ["", ""]
+    return "| " + " | ".join(cells) + " |"
+
+
+def _is_separator(line: str) -> bool:
+    s = line.strip()
+    return "|" in s and "-" in s and set(s) <= set("|-: ")
+
+
+def append_inflight_row(root: Path, fid: str, title: str, branch: str) -> bool:
+    """Insert an In-flight row into DELIVERY-TRACKER.md. Returns True if written.
+
+    Idempotent (won't duplicate an existing id) and graceful (returns False if the
+    tracker or its 'In flight' table is missing rather than raising).
+    """
+    p = root / TRACKER
+    if not p.is_file():
+        return False
+    lines = p.read_text().splitlines()
+
+    header = next(
+        (i for i, ln in enumerate(lines) if ln.strip().lower().startswith("## in flight")),
+        None,
+    )
+    if header is None:
+        return False
+
+    # locate the table separator inside the In flight section
+    sep = None
+    for i in range(header + 1, len(lines)):
+        if lines[i].strip().startswith("## "):
+            break
+        if _is_separator(lines[i]):
+            sep = i
+            break
+    if sep is None:
+        return False
+
+    # section body runs until the next "## " heading (or EOF)
+    end = next(
+        (i for i in range(sep + 1, len(lines)) if lines[i].strip().startswith("## ")),
+        len(lines),
+    )
+    body = [ln for ln in lines[sep + 1 : end] if "_Nothing in flight" not in ln]
+
+    if any(ln.lstrip().startswith(f"| {fid} ") for ln in body):
+        return True  # already tracked; nothing to do
+
+    new_body = [inflight_row(fid, title, branch), *body]
+    lines = lines[: sep + 1] + new_body + lines[end:]
+    p.write_text("\n".join(lines) + "\n")
+    return True
+
+
 def cmd_new(args: argparse.Namespace) -> int:
     root = find_repo_root(Path.cwd())
     fid = args.id or next_id(root)
@@ -75,13 +134,13 @@ def cmd_new(args: argparse.Namespace) -> int:
         dest.write_text(content)
         print(f"created {dest.relative_to(root)}")
 
-    slug = slugify(args.title)
+    branch = f"feat/{fid}-{slugify(args.title)}"
     print()
-    print("Delivery-tracker row (paste into DELIVERY-TRACKER.md):")
-    print(
-        f"| {fid} | {args.title} | feat/{fid}-{slug} "
-        f"| \U0001f7e1 | \u2b1c | \u2b1c | \u2b1c | \u2b1c | \u2b1c | \u2b1c |  |  |"
-    )
+    if not args.no_tracker and append_inflight_row(root, fid, args.title, branch):
+        print(f"updated {TRACKER} (added {fid} to In flight)")
+    else:
+        print("Delivery-tracker row (paste into DELIVERY-TRACKER.md):")
+        print(inflight_row(fid, args.title, branch))
     return 0
 
 
@@ -106,6 +165,11 @@ def build_parser() -> argparse.ArgumentParser:
     new = sub.add_parser("new", help="scaffold a new work unit (intent/spec/plan).")
     new.add_argument("title", help='short human title, e.g. "Export to CSV".')
     new.add_argument("--id", help="override the auto-incremented id (e.g. F-042).")
+    new.add_argument(
+        "--no-tracker",
+        action="store_true",
+        help="don't add the unit to DELIVERY-TRACKER.md; print the row instead.",
+    )
     new.set_defaults(func=cmd_new)
 
     ev = sub.add_parser("eval", help="run the agent-config eval suite.")
