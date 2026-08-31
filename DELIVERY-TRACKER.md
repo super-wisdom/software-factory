@@ -25,9 +25,8 @@ not the model's speed.
 
 | ID | Feature / fix | Worktree / stream | Intent | Spec | Plan | Build | Test | Review | Deploy | Owner | Notes / blockers |
 |----|---------------|-------------------|:------:|:----:|:----:|:-----:|:----:|:------:|:------:|:-----:|------------------|
-| F-001 | _example: claims status self-service_ | feat-claims-status | ✅ | ✅ | ✅ | 🟡 | ⬜ | ⬜ | ⬜ | ENG | caching for 50rps limit |
-| F-002 | | | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | | |
-| F-003 | | | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | | |
+
+_Nothing in flight — pull the next unit from the backlog._
 
 ## Backlog (accepted intents not yet started)
 
@@ -39,7 +38,8 @@ not the model's speed.
 
 | ID | Feature / fix | Shipped date | PR | Eval added? | Notes |
 |----|---------------|:------------:|----|:-----------:|-------|
-| | | | | | |
+| F-001 | factory new | 2026-08-31 | #1 | no | first real unit; +portable Makefile |
+| F-002 | Eval runner | 2026-08-31 | #2 | n/a (is the eval suite) | config regression net live; agent-evals wired |
 
 ---
 
