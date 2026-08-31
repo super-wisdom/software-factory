@@ -5,6 +5,9 @@ description = "A repo-native software factory: intent -> spec -> plan -> diff+te
 requires-python = ">=3.11"
 dependencies = []
 
+[project.scripts]
+factory = "software_factory.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6"]
 
